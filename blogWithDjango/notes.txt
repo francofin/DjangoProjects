@@ -1,0 +1,2 @@
+Signals helps decoupled aplplicstions get notified. 
+Good for code interested in the same event.
