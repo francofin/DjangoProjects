@@ -1,0 +1,58 @@
+need to serialize and deserialize into representations such as json. Can declare serializers that are similar to django forms. Serializier, converts a 
+daabase table into a format that can be transferred over the internet. 
+Serializers are similar to django form class. 
+
+>>> from backend.models import Article
+>>> from backend.serializers import ArticleSerializer
+>>> from rest_framework.renders import JSONRenderer
+>>> from rest_framework.renderers import JSONRenderer
+>>> from rest_framework.parsers import JSONParser
+>>> a = Article(title="my new title", description="my description")
+>>> a.save()
+>>> serializer = ArticleSerializer(a)
+>>> serializer.data
+{'title': 'my new title', 'description': 'my description', 'slug': 'my-new-title', 'published': '2022-05-29T04:45:19.832802Z'}
+>>> content = JSONRenderer().render(serializer.data)
+>>> content
+b'{"title":"my new title","description":"my description","slug":"my-new-title","published":"2022-05-29T04:45:19.832802Z"}'
+>>>
+Deserialize
+>>> import io
+>>> stream = io.BytesIO(content)
+>>> data = JSONParser().parse(stream)
+>>> data
+{'title': 'my new title', 'description': 'my description', 'slug': 'my-new-title', 'published': '2022-05-29T04:45:19.832802Z'}
+>>> serializer = ArticleSerializer(data=data)
+>>> serializer.is_valid()
+True
+>>> serializer.validated_data
+OrderedDict([('title', 'my new title'), ('description', 'my description'), ('slug', 'my-new-title')])
+>>>
+We can serialize a query set, essentialy Articles.objects.all(), we need the many to true flag in the ArticleSerializer(Articles.objects.all(), many=True)
+
+Model Serializers
+
+We have rest and model serializers.
+
+View Functions in rest rest_framework
+
+
+there are decorator api views for functions and class based views. Can snsure context is added to response objects
+Can handle unparsed errors. This also allows us to access the browasable api view of django. 
+
+Class based views. 
+
+Mixins 
+Allows us to compose reusable behaviour in class based view. 
+Generic based class views are the smoothest part. 
+
+ViewSets and Routers.Viewsets provide operations as retireve and update and not get and post. 
+A router class handles complexities of urls, no need to design urls with the viewsets. Using router classes, all we do is register the appropriate viewset with a router. 
+
+
+Generic viewsets do not include actions by default, we need to overide the class. 
+
+
+Model ViewSet. 
+
+We can add authentication on the settings .py file. 
