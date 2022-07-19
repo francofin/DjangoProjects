@@ -1,15 +1,17 @@
 from django.shortcuts import get_object_or_404, render
+from pytz import timezone
 from requests import get
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import mixins, generics, viewsets, status
-from .models import Job
-from .serializers import JobSerializer
+from .models import CandidatesApplied, Job
+from .serializers import CandidateAppliedSerializer, JobSerializer
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Avg, Min, Max, Count
 from .filters import JobsFilter
+from django.utils import timezone
 from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 
@@ -102,6 +104,58 @@ def deleteJob(request, pk):
     job.delete()
 
     return Response({ 'message': 'Job is Deleted.' }, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def apply_to_job(request, pk):
+    user = request.user
+    job = get_object_or_404(Job, id=pk)
+
+    if user.userprofile.resume == '':
+        return Response({
+            'error':"Please upload your resume first"
+        }, status = status.HTTP_400_BAD_REQUEST)
+
+    if job.applicationExpiry < timezone.now():
+        return Response({
+            'error':"Application period has been closed. Please return to search similar jobs."
+        }, status = status.HTTP_400_BAD_REQUEST)
+
+    # candidates_applied_set helps set the related name
+    already_applied = job.candidatesapplied_set.filter(user= user).exists()
+
+    if already_applied:
+        return Response({
+            'error':"You Have Already applied to this job"
+        }, status = status.HTTP_400_BAD_REQUEST)
+
+    job_applied = CandidatesApplied.objects.create(
+        job=job,
+        user=user,
+        resume = user.userprofile.resume
+    )
+
+    serializer = CandidateAppliedSerializer(job_applied)
+
+    return Response({
+        'applied':True,
+        'job_id':job_applied.id
+    }, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_applied_jobs(request):
+
+    args = {'user_id': request.user.id}
+
+    jobs = CandidatesApplied.objects.filter(**args)
+
+    serializer = CandidateAppliedSerializer(jobs, many=True)
+
+    return Response(serializer.data)
+
 
 
 @api_view(['GET'])

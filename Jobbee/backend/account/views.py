@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import SignUpSerializer, UserSerializer
+from job.validators import validate_file_extension, validate_image
 from django.contrib.auth.models import User
 from rest_framework import mixins, generics, viewsets, status
 
@@ -72,4 +73,32 @@ def update_user(request):
 
     serializer = UserSerializer(user, many=False)
 
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def upload_resume(request):
+
+    user = request.user
+    resume = request.FILES['resume']
+
+    is_valid_file = validate_file_extension(resume.name)
+    # print(user)
+
+    if not is_valid_file:
+        return Response({
+            'error':'Only file types are .pdf'
+        })
+
+    if resume == '':
+        return Response({
+            'error':'Please upload your Resume'
+        })
+
+    user.userprofile.resume = resume
+    user.userprofile.save()
+
+
+    serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
