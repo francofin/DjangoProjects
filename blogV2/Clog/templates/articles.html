@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Article List {% endblock %}
+
+
+
+    {% block style %}
+    <style>
+        .h1-style {
+                color: Grey;
+            }
+        .link-style{
+            text-decoration: none;
+            color: black;
+        }
+
+        .link-style:hover{
+            text-decoration: none;
+            color: blue;
+        }
+
+        .my-post {
+            min-height:150px;
+        }
+
+        .my-image {
+            max-height:700px;
+        }
+
+        
+
+    </style>
+        
+    {% endblock %}
+
+    {% block body %}
+
+    <div class="container pt-4">
+        <h1 class="h1-style"> Articles For You</h1>
+        <h2>The Place to learn</h2>
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-md-6 my-3 offset-2">
+                <div class="card my-post">
+                    <img src="{{post.image.url}}" class="card-img-top my-image" alt="...">
+                    <div class="card-body">
+                        <h4><a class="card-title link-style" href="{% url 'post_details' post.slug %}">{{post.title}}</a></h4>
+                        <p>@{{post.author}}</p>
+                        <a href="{% url 'post_details' post.slug %}" class="btn btn-primary">Read</a>
+                    </div> 
+                </div>
+            </div>
+            {% endfor %}
+        </div> 
+        
+        
+        {% include 'pagination.html' with page=post_set %}
+    </div>
+    
+
+
+    {% endblock %}

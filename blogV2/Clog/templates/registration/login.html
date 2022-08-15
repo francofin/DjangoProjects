@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Login {% endblock %}
+
+
+
+    {% block style %}
+    <style>
+        .h1-style {
+                color: grey;
+            }
+
+        .login {
+            width: 100%;
+            margin: auto;
+        }
+
+        .login-form{
+            width: 500px;
+            margin: auto;
+        }
+    </style>
+        
+    {% endblock %}
+
+    {% block body %}
+
+    <div class="container login mt-4">
+        
+        <div class="bg-dark text-secondary px-4 py-5 text-center">
+            <div class="py-5">
+                <h1 class="display-5 fw-bold text-white">What You Search For</h1>
+                <div class="col-lg-6 mx-auto">
+                    <h3 class="h1-style">Login</h3>
+                    <p>
+                        Beauty Comes In Any Way You Feel
+                    </p>
+                    <div class="row login-form">
+                        <div class="col-12">
+                            {% if form.errors %}
+                            <p>Incorrect Username or Password</p>
+                            {% else %}
+                            <p>Please provide your credentials</p>
+                            {% endif %}
+                            <form  action="" method="post" novalidate>
+                                {% csrf_token %}
+                                {{form | crispy}}
+                                
+            
+                                <input type="hidden" name="next" value="{{next}}" />
+                                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                                    <input class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold" type="submit" value="Login" />
+                                    <a class="btn btn-outline-light btn-lg px-4" href="{% url 'password_change' %}">Forgot Password</a>
+                                </div>
+                            </form>  
+                            
+                        
+                        </div>
+                    </div>    
+                    
+                </div>
+            </div>
+        </div>
+        
+        
+
+        
+    </div>
+    
+
+
+    {% endblock %}

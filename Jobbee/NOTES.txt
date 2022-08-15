@@ -1,0 +1,2 @@
+enable cors in python back end in settings.py
+add api url to env in next config. 

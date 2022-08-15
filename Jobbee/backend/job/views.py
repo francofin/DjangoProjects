@@ -40,9 +40,10 @@ def getAllJobs(request):
 
 @api_view(['GET'])
 def getJob(request, pk):
-    jobs = get_object_or_404(Job, id=pk)
-    serializer = JobSerializer(jobs)
-    return Response(serializer.data)
+    job = get_object_or_404(Job, id=pk)
+    candidates = job.candidatesapplied_set.all().count()
+    serializer = JobSerializer(job, many=False)
+    return Response({'job':serializer.data, 'candidates':candidates})
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -156,6 +157,45 @@ def get_applied_jobs(request):
 
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def is_applied(request, pk):
+    user = request.user
+    job = get_object_or_404(Job, id=pk)
+
+    applied = job.candidatesapplied_set.filter(user=user).exists()
+
+    return Response(applied)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_created_jobs(request):
+
+    args = {'user_id':request.user.id}
+
+    jobs_created = Job.objects.filter(**args)
+
+    serializer = JobSerializer(jobs_created, many=True)
+
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_candidates_applied(request, pk):
+
+    user = request.user
+    job = get_object_or_404(Job, id=pk)
+
+    if job.user != user:
+        return Response({
+            'error':'You do not have the proper permissions to access this job'
+        }, status=status.HTTP_403_FORBIDDEN)
+
+    candidates = job.candidatesapplied_set.all()
+
+    serializer = CandidateAppliedSerializer(candidates, mmany=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])

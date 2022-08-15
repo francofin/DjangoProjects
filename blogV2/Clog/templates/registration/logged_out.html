@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %} Login {% endblock %}
+
+
+
+    {% block style %}
+    <style>
+        .h1-style {
+                color: grey;
+            }
+
+        .login {
+            width: 700px;
+            margin: auto;
+        }
+        .link-style{
+        text-decoration: none;
+        color: black;
+        }
+
+        .link-style:hover{
+            text-decoration: none;
+            color: blue;
+        }
+    </style>
+        
+    {% endblock %}
+
+    {% block body %}
+    <div class="container login mt-4">
+        
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="card" style="width: 700px;">
+                    <img src="{% static 'images/nature.jpg' %}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h1 class="h1-style">You Have Been Logged Out</h1><a href="{% url 'user_login' %}">Login Here</a>
+                    </div>
+                </div>     
+            </div>
+        </div>    
+    </div>
+
+    {% endblock %}

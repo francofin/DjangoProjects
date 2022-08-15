@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Share your Thoughts {% endblock %}
+
+
+
+    {% block style %}
+    <style>
+        .h1-style {
+                color: grey;
+            }
+
+        .login {
+            width: 100%;
+            margin: auto;
+        }
+
+        .login-form{
+            width: 500px;
+            margin: auto;
+        }
+    </style>
+        
+    {% endblock %}
+
+    {% block body %}
+
+    <div class="container login mt-1">
+        
+        <div class="bg-dark text-secondary px-4 py-5 text-center">
+            <div class="py-5">
+                <h1 class="display-5 fw-bold text-white">Help Us Learn And Grow</h1>
+                <div class="col-lg-6 mx-auto">
+                    <h3 class="h1-style">Add Your Thoughts</h3>
+                    <p>
+                        Why Not Try a Little Crazy
+                    </p>
+                    <div class="row login-form">
+                        <div class="col-12">
+                            <form  action="" method="post" enctype="multipart/form-data" novalidate>
+                                
+                                {{post_form | crispy}}
+                                {% csrf_token %}
+                                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                                    <input class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold" type="submit" value="Submit Post" />
+                                </div>
+                            </form>      
+                        </div>
+                    </div>    
+                    
+                </div>
+            </div>
+        </div>
+        
+        
+
+        
+    </div>
+
+
+    {% endblock %}
