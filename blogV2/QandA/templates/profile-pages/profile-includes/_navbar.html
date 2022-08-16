@@ -1,0 +1,59 @@
+{% load static %}
+
+
+<div class="sidebar d-none d-lg-block">
+    <div class="sidebar-sticky">
+        <div class="logo-wrapper">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'images/hdi/logo2.jpg' %}" alt="" class="img-fluid">
+            </a>
+        </div>
+
+        <div class="main-menu">
+            <nav class="navbar navbar-expand-lg p-0">
+                <div class="navbar-collapse collapse" id="navbarsExample09" style="">
+                    <ul class="list-unstyled ">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown01">
+                        <a class="dropdown-item" href="index.html">Home 1</a>
+                        <a class="dropdown-item" href="index-2.html">Home 2</a>
+                        <a class="dropdown-item" href="index-3.html">Home 3</a>
+                        <a class="dropdown-item" href="index-4.html">Home 4</a>
+                        <a class="dropdown-item" href="index-5.html">Home 5</a>
+                        <a class="dropdown-item" href="index-6.html">Home 6</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">All Post</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="{% url 'post_question' %}">Create Post</a>
+                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="fashion.html">Answered Topics</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user_logout' %}">Logout</a>
+                    </li>
+                    <li>
+        
+                    <div class="sidebar-widget about text-center p-3">
+                        <div class="about-author" style=" padding-bottom: 40px;">
+                            <img src="{{request.user.profile_picture.url}}" alt="" class="img-fluid" style="width:300px;">
+                            <h5 class="mb-0 mt-4">@{{request.user.username}}</h5>
+                            <p>{{request.user.about}}</p>
+                        <div>
+                    </div>
+                      
+                    </li>
+                    </ul>  
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>

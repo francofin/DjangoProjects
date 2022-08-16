@@ -13,6 +13,12 @@ class QuestionForm(forms.ModelForm):
         model = Question
         fields = ('title', 'body','image1', 'image2', 'image3',)
 
+class QuestionUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Question
+        fields = ('title', 'body','image1', 'image2', 'image3',)
+
 class AnswerForm(forms.ModelForm):
 
     class Meta:
