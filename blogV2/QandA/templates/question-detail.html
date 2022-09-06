@@ -142,6 +142,20 @@
 					<div class="comment-meta mt-4 mt-lg-0 mt-md-0">
 						<a href="#" class="text-underline ">Reply</a>
 					</div>
+					{% if request.user == answer.author %}
+					<div class="row">
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<a class="btn btn-success" id="update-answer">Update</a>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<a class="btn btn-danger" href="{% url 'delete_answer' question.slug answer.id%}">Delete</a>
+						</div>
+					</div>
+					{% endif %}
+					<div id="answer-update-by-user">
+						{% include 'profile-pages/profile-includes/_update-answer.html' %}
+					</div>
+						
 				</div>
 				</div>
 			{% endfor %}
@@ -253,5 +267,5 @@
 </section>
 {% endif %}
 
-
+<script src="{% static 'js/utils.js' %}"></script>
 {% endblock %}

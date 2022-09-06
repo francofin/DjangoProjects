@@ -1,0 +1,45 @@
+{% extends 'profile-pages/profilebase.html' %}
+{% load static %}
+
+
+{% block body %}
+
+<div class="content">
+    <div class="row">
+        {% for answer in answers %}
+        <div class="col-lg-4 col-md-4 col-sm-6">
+            <article class="post-grid mb-5 ">
+                <a class="post-thumb mb-4 d-block" href="{% url 'question_detail' answer.question.slug %}">
+                    <img src="{{answer.question.image1.url}}" alt="" class="img-fluid w-100">
+                </a>
+
+                <div class="post-content-grid">
+                    <div class="label-date">
+                        <span class="month text-uppercase">{{answer.question.created_at}}</span>
+                    </div>
+                    <span class="cat-name text-color font-extra font-sm text-uppercase letter-spacing">{{answer.question.category}}</span>
+                    <h3 class="post-title mt-1"><a href="blog-single.html">{{answer.question.title}}</a></h3>
+                    <p><strong>Your Response:</strong> {{answer.body}}</p>
+                </div>
+
+                {% if request.user == answer.question.author %}
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-6">
+                        <a class="btn btn-success" href="{% url 'update_question' answer.question.slug %}">Update</a>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6">
+                        <a class="btn btn-danger" href="{% url 'delete_question' answer.question.slug %}">Delete</a>
+                    </div>
+                </div>
+                {% endif %}
+            </article>
+        </div>
+        {% endfor %}
+    </div>
+    {% include 'profile-pages/profile-includes/_pagination.html' with page=answer_set %}
+</div>
+
+
+
+
+{% endblock %}

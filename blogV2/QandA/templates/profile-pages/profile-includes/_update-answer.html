@@ -1,0 +1,16 @@
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+<form class="comment-form mb-5 gray-bg p-5" id="comment-form" method="post" action="" enctype="multipart/form-data">
+    <h3 class="mb-4 text-center">Update Response</h3>
+        {% csrf_token %}	
+    
+        {{answer_update_form | crispy}}
+
+    <input class="btn btn-primary" type="submit" name="submit-contact" id="submit_contact" value="Submit Message">
+</form>
+
+
+
+

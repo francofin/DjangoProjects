@@ -27,3 +27,13 @@ class UserRegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Passwords do not match")
         else:
             return clean_data['confirm_password']
+
+
+class ProfileForm(forms.ModelForm):
+    about = forms.Textarea()
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'profile_picture', 'about')
+
+

@@ -19,10 +19,10 @@
                         <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown01">
-                        <a class="dropdown-item" href="index.html">Home 1</a>
-                        <a class="dropdown-item" href="index-2.html">Home 2</a>
-                        <a class="dropdown-item" href="index-3.html">Home 3</a>
-                        <a class="dropdown-item" href="index-4.html">Home 4</a>
+                        <a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a>
+                        <a class="dropdown-item" href="{% url 'change_profile' %}">Change Account Detail</a>
+                        <a class="dropdown-item" href="index-3.html">Liked Post</a>
+                        <a class="dropdown-item" href="{% url 'user_responses' %}">All Responses</a>
                         <a class="dropdown-item" href="index-5.html">Home 5</a>
                         <a class="dropdown-item" href="index-6.html">Home 6</a>
                         </div>

@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, ProfileForm
 from .models import CustomUser
+from django.contrib import messages
+
 
 # Create your views here.
 def user_register(request):
@@ -19,3 +21,18 @@ def user_register(request):
         user_form = UserRegistrationForm()
     return render(request, "register.html", {'form':user_form})
 
+
+def change_profile(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance = request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile Has Been Up[dated")
+    else:
+        form = ProfileForm(instance = request.user)
+
+    context = {
+        'form':form
+    }
+
+    return render(request, 'profile-pages/account-detail.html', context)

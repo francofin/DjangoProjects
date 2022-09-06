@@ -47,6 +47,10 @@ class Answer(models.Model):
         return self.author.username
 
 
+class LikePost(models.Model):
+    liked_at = models.DateTimeField(auto_now_add=True)
+    
+
 # class Images(models.Model):
 #     question = models.ForeignKey(Question, default=None, on_delete=models.CASCADE)
 #     answer = models.ForeignKey(Answer, default=None, on_delete=models.CASCADE, null=True)

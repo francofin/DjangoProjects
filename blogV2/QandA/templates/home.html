@@ -13,7 +13,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-10 col-9">
-                        <input type="text" class="form-control" placeholder="Search..."/>
+                        <input type="text" class="form-control" placeholder="Search..." name='q'/>
                     </div>
                     <div class="col-md-2 col-3 text-right">
                         <div class="search_toggle toggle-wrap d-inline-block">
@@ -43,9 +43,9 @@
 
           <div class="post-content-grid">
               <div class="label-date">
-                <span class="month text-uppercase">Respond</span>
+                <span><a href="{% url 'question_detail' question.slug %}">Reply</a></span>
               </div>
-              <span class="cat-name text-color font-extra font-sm text-uppercase letter-spacing">@{{question.author.username}}</span>
+              <span class="cat-name text-color font-extra font-sm text-uppercase letter-spacing">{{question.category}}: @{{question.author.username}}</span>
               <h3 class="post-title mt-1"><a href="blog-single.html">{{question.title}}</a></h3>
               <p>{{question.body}}</p>
               <span class="month text-uppercase">{{question.created_at}}</span>

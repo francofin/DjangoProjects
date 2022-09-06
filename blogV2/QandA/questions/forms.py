@@ -24,6 +24,13 @@ class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
         fields = ('body', 'image1', 'image2', 'image3',)
+
+class AnswerUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Answer
+        fields = ('body', 'image1', 'image2', 'image3',)
+
 # class PostUpdateForm(forms.ModelForm):
 
 #     class Meta:
