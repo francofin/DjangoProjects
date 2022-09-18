@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import CustomUser, UserProfile
 from .serializers import UserSerializer, UserProfileSerializer, SignUpSerializer
 from django.http import JsonResponse
+from django.conf import settings
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth.hashers import make_password
@@ -12,6 +13,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from jobs.validators import validate_image, validate_file_extension
+from utils.uploadImages import ImageUploader
 # Create your views here.
 
 
@@ -29,7 +31,11 @@ class UserProfileViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.
     parser_classes = [parsers.MultiPartParser, parsers.FormParser]
     http_method_names = ['get', 'post', 'patch', 'delete']
 
+def get_payment_key(request):
 
+    stripe_payment_key = settings.STRIPE_SECRET_KEY
+
+    return Response(stripe_payment_key)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -39,7 +45,13 @@ def get_current_user(request):
 
     return Response(user.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_current_user_profile(request):
+    user_profile = UserProfileSerializer(request.user)
+    print(user_profile) 
 
+    return Response(user_profile.data)
 
 @api_view(['PUT', 'POST'])
 @permission_classes([IsAuthenticated])
@@ -47,33 +59,94 @@ def update_user(request):
 
     user = request.user
     data = request.data
-    profile_picture = request.FILES['profile_picture']
+    print("Request", request.data)    
 
-    is_valid_image = validate_image(profile_picture.name)
-    print(is_valid_image)
+    # profile_picture = request.FILES["profile_picture"]
+    
+
+    # is_valid_image = validate_image(profile_picture.name)
+    # print(is_valid_image)
     user.first_name = data['first_name']
     user.last_name = data['last_name']
-    user.username = data['username']
+    # user.username = data['username']
     user.email = data['email']
-    user.userprofile.profile_picture = profile_picture
+    user.profile_picture_cs = data['profile_picture_cs']
+    # ret = ImageUploader.UploadImage(user.first_name, profile_picture)
+
+    
 
     if data['password'] != '':
         user.password = make_password(data['password'])
-    
-    if request.FILES['profile_picture'] != user.userprofile.profile_picture:
-            user.userprofile.profile_picture = request.FILES['profile_picture']
-    user.save()
-    user.userprofile.save()
 
-    serializer = UserSerializer(user, many=False)
-    serializer_profile = UserProfileSerializer(user, many=False)
+    # user.profile_picture = profile_picture
+    
+    # if request.FILES['profile_picture'] != user.profile_picture:
+
+    user.save()
+
+    serializer = UserSerializer(user, many=False, data=data)
+
+    
     if serializer.is_valid():
         serializer.save()
 
-    if serializer_profile.is_valid():
-        serializer_profile.save()
 
-    return Response(serializer.data, serializer_profile.data, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['PUT', 'POST'])
+@permission_classes([IsAuthenticated])
+def update_user_profile(request):
+
+    user = request.user
+    data = request.data
+
+    user.userprofile.address = data['address']
+    user.userprofile.date_of_birth = data['date_of_birth']
+    user.userprofile.about = data['about']
+    user.userprofile.about1 = data['about1']
+    user.userprofile.about2 = data['about2']
+    user.userprofile.about3 = data['about3']
+    user.userprofile.about4 = data['about4']
+    user.userprofile.about5 = data['about5']
+    user.userprofile.about6 = data['about6']
+    user.userprofile.about7 = data['about7']
+    user.userprofile.about8 = data['about8']
+    user.userprofile.about9 = data['about9']
+    user.userprofile.about10 = data['about10']
+    user.userprofile.about11 = data['about11']
+    user.userprofile.about12 = data['about12']
+    user.userprofile.about13 = data['about13']
+    user.userprofile.about14 = data['about14']
+    user.userprofile.cover_picture = data['cover_picture']
+    user.userprofile.phone_number = data['phone_number']
+    user.userprofile.profile_picture1 = data['profile_picture1']
+    user.userprofile.profile_picture2 = data['profile_picture2']
+    user.userprofile.profile_picture3 = data['profile_picture3']
+    user.userprofile.profile_picture4 = data['profile_picture4']
+    user.userprofile.profile_picture5 = data['profile_picture5']
+    user.userprofile.profile_picture6 = data['profile_picture6']
+    user.userprofile.profile_picture7 = data['profile_picture7']
+    user.userprofile.profile_picture8 = data['profile_picture8']
+    user.userprofile.profile_picture9 = data['profile_picture9']
+    user.userprofile.profile_picture10 = data['profile_picture10']
+    user.userprofile.resume = data['resume']
+    user.userprofile.document = data['document']
+    user.userprofile.document1 = data['document1']
+    user.userprofile.document2 = data['document2']
+    user.userprofile.document3 = data['document3']
+    user.userprofile.document4 = data['document4']
+    user.userprofile.stripe_account_id = data['stripe_account_id']
+
+    user.userprofile.save()
+
+    serializer = UserSerializer(user, many=False, data=data)
+
+    
+    if serializer.is_valid():
+        serializer.save()
+
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])

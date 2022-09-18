@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'dj_rest_auth',
     'corsheaders', 
+    'import_export',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -59,6 +60,8 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'storages',
     'django.contrib.postgres',
+    'stockuploader.apps.StockuploaderConfig',
+    'fintank_screener.apps.FintankScreenerConfig'
 ]
 
 SITE_ID = 1
@@ -79,7 +82,7 @@ ROOT_URLCONF = 'theClassified.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,7 +97,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'theClassified.wsgi.application'
 
-
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 6000
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -140,8 +143,8 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3001',
-    'http://127.0.0.1:3001',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
 ]
 
 # ACCOUNT_EMAIL_VERIFICTION = 'none'
@@ -201,6 +204,11 @@ AWS_DEFAULT_ACL = None
 AWS_S3_VERIFY = True
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
+
+FMP_API_URL=os.getenv("FMP_URL")
+FMP_API=os.getenv("FMP_API")
+
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 
 CLOUDINARY_CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME")
 CLOUDINARY_API_KEY = os.getenv("CLOUDINARY_API_KEY")

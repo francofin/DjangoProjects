@@ -19,8 +19,7 @@ class SignUpSerializer(serializers.ModelSerializer):
         }
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    resume = serializers.CharField(source='userprofile.resume')
-    profile_picture = serializers.CharField(source='userprofile.profile_picture')
+    
     user = serializers.StringRelatedField()
     class Meta:
         model = UserProfile
@@ -29,6 +28,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     user_security_identifier = serializers.CharField(max_length=500,read_only=True)
+    profile_picture = serializers.CharField(max_length=500)
+    profile_picture_cs = serializers.CharField(max_length=600)
     class Meta:
         model = CustomUser
-        fields = ('first_name', 'last_name', 'email', 'username', 'role', 'user_security_identifier')
+        fields = ('id', 'first_name', 'last_name', 'email', 'username', 'role', 'user_security_identifier', 'password', 'profile_picture', 'profile_picture_cs')
