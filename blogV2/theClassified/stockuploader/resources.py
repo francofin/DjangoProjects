@@ -1,5 +1,5 @@
 from import_export import resources
-from .models import Stock, SP500, Nasdaq, TSX, Commoditie, ETF, ProfileStock, Crypto, Indexe
+from .models import Stock, SP500, Nasdaq, TSX, Commoditie, ETF, ProfileStock, Crypto, Indexe, EuroStock
 
 
 class StockResource(resources.ModelResource):
@@ -46,3 +46,8 @@ class IndexResource(resources.ModelResource):
 
     class meta:
         model = Indexe
+
+class EuroResource(resources.ModelResource):
+
+    class meta:
+        model = EuroStock

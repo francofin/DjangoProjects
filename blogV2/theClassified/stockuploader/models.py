@@ -10,6 +10,7 @@ class Stock(models.Model):
     exchange_short = models.CharField(max_length=300, default="", null=True)
     stock_type = models.CharField(max_length=300,default="", null=True)
     is_featured = models.BooleanField(default=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.symbol
@@ -62,11 +63,21 @@ class Commoditie(models.Model):
 class Indexe(models.Model):
     symbol = models.CharField(max_length=300)
     name = models.CharField(max_length=300)
+    is_featured = models.BooleanField(default=False)
+    is_for_homepage = models.BooleanField(default=False)
 
     def __str__(self):
         return self.symbol
 
 class Crypto(models.Model):
+    symbol = models.CharField(max_length = 200)
+    name = models.CharField(max_length=300)
+    currency = models.CharField(max_length=200, null=True)
+    exchange = models.CharField(max_length=300, default="", null=True)
+    def __str__(self):
+        return self.symbol
+
+class EuroStock(models.Model):
     symbol = models.CharField(max_length = 200)
     name = models.CharField(max_length=300)
     currency = models.CharField(max_length=200, null=True)

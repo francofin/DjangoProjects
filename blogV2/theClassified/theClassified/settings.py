@@ -97,7 +97,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'theClassified.wsgi.application'
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 6000
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 60000
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -145,6 +145,10 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
+    'http://localhost:8020',
+    'http://127.0.0.1:8020',
+    'http://localhost:3001',
+    'http://127.0.0.1:3001',
 ]
 
 # ACCOUNT_EMAIL_VERIFICTION = 'none'
