@@ -211,7 +211,7 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 FMP_API_URL=os.getenv("FMP_URL")
 FMP_API=os.getenv("FMP_API")
-
+FMP_PRICE_URL=os.getenv("FMP_CLOUD_DATA_BASE_URL")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 
 CLOUDINARY_CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME")

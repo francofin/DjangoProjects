@@ -8,7 +8,9 @@ class Stock(models.Model):
     name = models.CharField(max_length=300, default="")
     exchange = models.CharField(max_length=300, default="", null=True)
     exchange_short = models.CharField(max_length=300, default="", null=True)
+    universe = models.CharField(max_length=200, null=True, blank=True, default=None)
     stock_type = models.CharField(max_length=300,default="", null=True)
+    
     is_featured = models.BooleanField(default=True, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
@@ -28,6 +30,7 @@ class Nasdaq(models.Model):
     sub_sector = models.CharField(max_length=300)
     founded = models.CharField(max_length=300, null=True)
     cik = models.IntegerField(max_length=400, default=None, blank=True, null=True)
+    universe = models.CharField(max_length=200, null=True, blank=True, default=None)
 
     def __str__(self):
         return self.symbol
@@ -37,6 +40,7 @@ class TSX(models.Model):
     name = models.CharField(max_length=300)
     currency = models.CharField(max_length=300)
     exchange = models.CharField(max_length=300, default=" ")
+    universe = models.CharField(max_length=200, null=True, blank=True, default=None)
 
     def __str__(self):
         return self.symbol
@@ -82,6 +86,7 @@ class EuroStock(models.Model):
     name = models.CharField(max_length=300)
     currency = models.CharField(max_length=200, null=True)
     exchange = models.CharField(max_length=300, default="", null=True)
+    universe = models.CharField(max_length=200, null=True, blank=True, default=None)
     def __str__(self):
         return self.symbol
 
@@ -93,6 +98,7 @@ class SP500(models.Model):
     founded = models.CharField(max_length=300, null=True)
     date_first_added=models.DateTimeField(auto_now_add=False, null=True)
     cik = models.IntegerField(max_length=400, default=None, blank=True, null=True)
+    universe = models.CharField(max_length=200, null=True, blank=True, default=None)
 
     def __str__(self):
         return self.symbol

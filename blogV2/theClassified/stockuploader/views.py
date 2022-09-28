@@ -10,7 +10,7 @@ from tablib import Dataset
 
 def upload_template(request):
     if request.method == 'POST':
-        stock_resource = EuroResource()
+        stock_resource = StockResource()
         dataset = Dataset()
         new_stock = request.FILES['myfile']
 
@@ -20,14 +20,16 @@ def upload_template(request):
 
         imported_dataset = dataset.load(new_stock.read(),format='xlsx')
         for data in imported_dataset:
-            value = EuroStock(
+            value = Stock(
                 data[0],
                 data[1],
                 data[2],
                 data[3],
                 data[4],
-                # data[5],
+                data[5],
                 # data[6],
+                # data[7],
+                # data[8],
             )
             value.save()
     return render(request, 'upload.html')

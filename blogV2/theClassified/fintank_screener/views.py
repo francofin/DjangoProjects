@@ -1,6 +1,9 @@
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, redirect
 from pytz import timezone
 from requests import get
+from django.conf import settings
+from utils.StockCalculations import GetData
+from utils.UniverseCalculations import UniverseData
 import urllib.parse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from stockuploader.models import EuroStock, Stock, SP500, Nasdaq, TSX, Commoditie, ETF, ProfileStock, Crypto, Indexe
@@ -149,3 +152,46 @@ def get_company_location(request, address):
         "lat":latitude
     }
     return Response(context)
+
+@api_view(['GET'])
+def get_daily_stock_data(rquest, ticker):
+    fmp_api_key = settings.FMP_API
+
+    data_init = GetData(ticker, fmp_api_key)
+    daily_data = data_init.get_daily_stats()
+    daily_dates = [str(x)[0:10] for x in list(daily_data.index)]
+    daily_prices = [x for x in list(daily_data['close'])]
+
+    context = {
+        'dates':daily_dates,
+        'prices':daily_prices
+    }
+
+    return Response(context)
+
+@api_view(['GET'])
+def get_weekly_stock_data(rquest, ticker):
+    fmp_api_key = settings.FMP_API
+
+    data_init = GetData(ticker, fmp_api_key)
+    weekly_data = data_init.get_weekly_stats()
+
+    return weekly_data
+
+@api_view(['GET'])
+def get_monthly_stock_data(rquest, ticker):
+    fmp_api_key = settings.FMP_API
+
+
+    data_init = GetData(ticker, fmp_api_key)
+    monthly_data = data_init.get_monthly_stats()
+
+    return monthly_data
+
+@api_view(['GET'])
+def get_stock_peer_list(rquest, ticker, universe):
+
+    data_init = UniverseData(ticker, universe)
+    available_stocks = data_init.get_universe()
+    available_universe = available_stocks[ticker]
+    return Response(available_universe)
