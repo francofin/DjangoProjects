@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'store.apps.StoreConfig',
     'theRest.apps.TherestConfig',
     'jobs.apps.JobsConfig',
+    'journal.apps.JournalConfig',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
@@ -198,7 +199,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY")
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
 AWS_S3_SIGNATURE_VERSION = os.getenv("AWS_VERSION")

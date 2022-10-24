@@ -15,6 +15,7 @@ from .filters import SP500Filter, StockFilter, ETFFilter, NasdaqFilter, TSXFilte
 from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 
+fmp_api_key = settings.FMP_API
 
 @api_view(['GET'])
 def get_all_indexes(request):
@@ -154,7 +155,7 @@ def get_company_location(request, address):
     return Response(context)
 
 @api_view(['GET'])
-def get_daily_stock_data(rquest, ticker):
+def get_daily_stock_data(request, ticker):
     fmp_api_key = settings.FMP_API
 
     data_init = GetData(ticker, fmp_api_key)
@@ -170,7 +171,7 @@ def get_daily_stock_data(rquest, ticker):
     return Response(context)
 
 @api_view(['GET'])
-def get_weekly_stock_data(rquest, ticker):
+def get_weekly_stock_data(request, ticker):
     fmp_api_key = settings.FMP_API
 
     data_init = GetData(ticker, fmp_api_key)
@@ -179,7 +180,7 @@ def get_weekly_stock_data(rquest, ticker):
     return weekly_data
 
 @api_view(['GET'])
-def get_monthly_stock_data(rquest, ticker):
+def get_monthly_stock_data(request, ticker):
     fmp_api_key = settings.FMP_API
 
 
@@ -189,9 +190,44 @@ def get_monthly_stock_data(rquest, ticker):
     return monthly_data
 
 @api_view(['GET'])
-def get_stock_peer_list(rquest, ticker, universe):
+def get_stock_peer_list(request, ticker, universe):
 
-    data_init = UniverseData(ticker, universe)
+    data_init = UniverseData(fmp_api_key, universe, ticker)
     available_stocks = data_init.get_universe()
     available_universe = available_stocks[ticker]
     return Response(available_universe)
+
+@api_view(['GET'])
+def get_sector_performance(request):
+
+    data_init = UniverseData(fmp_api_key)
+    sector_data = data_init.get_sector_returns()
+    
+    return Response(sector_data)
+
+@api_view(['GET'])
+def get_sector_timeseries_data(request, frq):
+
+    data_init = UniverseData(fmp_api_key)
+    sector_return_time_series = data_init.get_sector_return_timeseries(frq)
+    sector_vol_time_series = data_init.get_sector_vol_timeseries(frq)
+
+    sector_time_series_context = {
+        'return_time_series':sector_return_time_series,
+        'vol_time_series':sector_vol_time_series
+    }
+    
+    return Response(sector_time_series_context)
+
+@api_view(['GET'])
+def get_daily_gainer_loser_active(request):
+
+    data_init = UniverseData(fmp_api_key)
+    most_gainer, most_loser, most_active = data_init.get_most_gainer_loser_active()
+    context = {
+        'most_gainer':most_gainer,
+        'most_loser':most_loser,
+        'most_active':most_active
+    }
+    
+    return Response(context)

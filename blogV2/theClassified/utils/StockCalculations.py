@@ -60,4 +60,4 @@ class GetData:
         
         
         return monthly_data
-        
+
