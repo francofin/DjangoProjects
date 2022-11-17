@@ -27,6 +27,7 @@ urlpatterns = [
     path('', include('stockuploader.urls')),
     path('', include('fintank_screener.urls')),
     path('', include('journal.urls')),
+    path('', include('news.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('accounts/', include('allauth.urls')),

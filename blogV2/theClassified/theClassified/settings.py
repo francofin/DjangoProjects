@@ -14,11 +14,11 @@ from pathlib import Path
 import os
 from datetime import timedelta
 from dotenv import load_dotenv
+from decouple import config
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -27,8 +27,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+# DEBUG = True
+DEBUG = config("DEBUG", default=0)
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
@@ -49,8 +49,12 @@ INSTALLED_APPS = [
     'theRest.apps.TherestConfig',
     'jobs.apps.JobsConfig',
     'journal.apps.JournalConfig',
+    'news.apps.NewsConfig',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_cron',
+    'django_celery_beat',
+    'django_celery_results',
     'dj_rest_auth',
     'corsheaders', 
     'import_export',
@@ -125,6 +129,11 @@ AUTH_USER_MODEL = 'users.CustomUser'
 STORE_MODEL = 'store.Store'
 # Will opt for app level permissions
 
+
+CRON_CLASSES = [
+    "news.cron.MyCronJob",
+    # ...
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -209,6 +218,17 @@ AWS_DEFAULT_ACL = None
 AWS_S3_VERIFY = True
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
+AZURE_API_KEY = os.getenv("AZURE_BING_KEY")
+
+# CELERY_BROKER_URL = 'redis://localhost:6379'
+# CELERY_RESULT_BACKEND = "django-db"
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_BROKER_URL = config('CELERY_BROKER_REDIS_URL', default='redis://localhost:6379')
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
 
 FMP_API_URL=os.getenv("FMP_URL")
 FMP_API=os.getenv("FMP_API")
@@ -219,6 +239,8 @@ CLOUDINARY_CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME")
 CLOUDINARY_API_KEY = os.getenv("CLOUDINARY_API_KEY")
 CLOUDINARY_API_SECRET= os.getenv("CLOUDINARY_SECRET_API")
 CLOUDINARY_URL= os.getenv("CLOUDINARY_URL")
+
+
 
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
