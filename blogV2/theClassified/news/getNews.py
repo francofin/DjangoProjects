@@ -9,7 +9,8 @@ class GetNewsArticles:
     def __init__(self):
         self.search_terms=['Economy', 'Stock Market', 'Technology', 'Inflation', 'Politics', \
                         'Energy', 'War', 'Oil', 'Middle East', 'South America', 'US', 'Japan', 'China', 'Russia', 'Germany','Africa', \
-                        'Basic Materials', 'Industrials', 'Utilities Sector', 'Pharmaceuticals', 'Consumer trends', 'Financials']
+                        'Basic Materials', 'Industrials', 'Utilities Sector', 'Pharmaceuticals', 'Consumer trends', 'Financials', \
+                        'Real Estate', 'Communications Industry']
   
 
     def get_news(self, search_term):
@@ -140,5 +141,13 @@ class GetNewsArticles:
         fin = self.get_news(search_terms[21])
         return fin
 
+    def get_re_articles(self):
+        search_terms = self.search_terms
+        re = self.get_news(search_terms[22])
+        return re
 
+    def get_comm_articles(self):
+        search_terms = self.search_terms
+        comm = self.get_news(search_terms[23])
+        return comm
     

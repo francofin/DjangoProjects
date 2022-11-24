@@ -5,7 +5,15 @@ from .getNews import GetNewsArticles
 
 news_articles_init = GetNewsArticles()
 
+@shared_task(name='get_re_articles')
+def re_articles():
+    articles = news_articles_init.get_re_articles()
+    return articles
 
+@shared_task(name='get_comm_articles')
+def comm_articles():
+    articles = news_articles_init.get_comm_articles()
+    return articles
 
 @shared_task(name='get_economic_articles')
 def economic_articles():
