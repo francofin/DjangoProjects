@@ -202,8 +202,13 @@ def get_sector_performance(request):
 
     data_init = UniverseData(fmp_api_key)
     sector_data = data_init.get_sector_returns()
+
+    context = {
+        'sector_data':sector_data[0],
+        'sector_message':sector_data[1],
+    }
     
-    return Response(sector_data)
+    return Response(context)
 
 @api_view(['GET'])
 def get_sector_timeseries_data(request, frq):

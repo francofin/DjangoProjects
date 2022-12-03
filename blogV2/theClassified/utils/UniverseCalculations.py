@@ -48,8 +48,17 @@ class UniverseData:
 
     def get_sector_returns(self):
         data = json.loads(requests.get(self.sector_perf_url).content)
+        sector_perf_positives = [float(data[x]['changesPercentage'].split("%")[0]) for x in range(len(data))]
+        greater_than_zero = len([i for i in sector_perf_positives if i > 0])
+        message = ''
+        if greater_than_zero == 13:
+            message = "All Sectors Outperformed"
+        elif greater_than_zero >= 6:
+            message = "General Positive Day in Markets"
+        elif greater_than_zero <= 6:
+            message = "Red Mostly Agross The Board"
 
-        return data
+        return data, message
 
     def get_sector_return_timeseries(self, frequency=''):
 

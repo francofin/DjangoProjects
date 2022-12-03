@@ -134,6 +134,12 @@ def fin_articles():
     return articles
 
 
+@shared_task(name='get_fmp_articles')
+def fmp_articles():
+    articles = news_articles_init.get_fmp_articles()
+    return articles
+
+
 @shared_task(name="sum_two_numbers")
 def add(x, y):
     return x + y

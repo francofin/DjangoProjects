@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view, permission_classes
 from .tasks import economic_articles, market_articles, political_articles, inflation_articles, war_articles, \
                     us_articles, china_articles, russia_articles, mid_east_articles, german_articles, japan_articles, africa_articles, \
                     southam_articles, tech_articles, energy_articles, oil_articles, pharma_articles, fin_articles, cons_articles, \
-                    mat_articles, util_articles, ind_articles, re_articles, comm_articles
+                    mat_articles, util_articles, ind_articles, re_articles, comm_articles, fmp_articles
 
 # Create your views here.
 econ = economic_articles.apply_async()
@@ -36,6 +36,7 @@ util = util_articles.apply_async()
 indus = ind_articles.apply_async()
 re = re_articles.apply_async()
 comm = comm_articles.apply_async()
+fmp = fmp_articles.apply_async()
 
 
 @api_view(['GET'])
@@ -276,6 +277,17 @@ def get_russia_news(request):
     context = {
         'data':data,
         'tag':"Russia"
+    }
+    
+    return Response(context)
+
+
+@api_view(['GET'])
+def get_fmp_news(request):
+    data = fmp.get()
+    context = {
+        'data':data,
+        'tag':"fmp"
     }
     
     return Response(context)

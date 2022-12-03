@@ -99,6 +99,10 @@ app.conf.beat_schedule = {
         'task': 'get_war_articles',
         'schedule': crontab(minute='*/15'), # runs every 15 minutes
         'args': ()
+    },'fmp_news': {
+        'task': 'get_fmp_articles',
+        'schedule': crontab(minute='*/60'), # runs every 15 minutes
+        'args': ()
     },
     'multiply-every-5-seconds': {
         'task': 'multiply_two_numbers',

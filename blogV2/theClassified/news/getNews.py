@@ -24,6 +24,23 @@ class GetNewsArticles:
 
         return items
 
+    def collect_fmp_articles(self):
+        api_key = settings.FMP_API
+        article_indexer = range(15)
+        all_articles = []
+        i=0
+        while i < len(article_indexer):
+            news_article_list = json.loads(requests.get(f"https://financialmodelingprep.com/api/v4/general_news?page={i}&apikey={api_key}").content)
+            for j in range(0, len(news_article_list)):
+                all_articles.append(news_article_list[j])
+            i+=1
+  
+        # news_article_list = json.loads(requests.get(f"https://financialmodelingprep.com/api/v4/general_news?page=1&apikey={api_key}").content)
+            
+        return all_articles
+
+
+ 
 
     def get_econ_articles(self):
         search_terms = self.search_terms
@@ -150,4 +167,9 @@ class GetNewsArticles:
         search_terms = self.search_terms
         comm = self.get_news(search_terms[23])
         return comm
+
+    def get_fmp_articles(self):
+        fmp = self.collect_fmp_articles()
+        return fmp
+
     

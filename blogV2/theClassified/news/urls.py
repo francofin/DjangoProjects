@@ -27,6 +27,7 @@ urlpatterns = [
     path('newsarticles/util', views.get_util_news, name='util_news'),
     path('newsarticles/realestate', views.get_re_news, name='re_news'),
     path('newsarticles/comm', views.get_comm_news, name='comm_news'),
+    path('newsarticles/fmp', views.get_fmp_news, name='fmp_news'),
     # path('news-articles/econ', views.get_econ_news, name='econ_news'),
     # path('news-articles/econ', views.get_econ_news, name='econ_news'),
 ]
