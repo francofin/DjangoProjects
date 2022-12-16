@@ -11,7 +11,127 @@ import pickle
 from django.conf import settings
 from .DailyFunctions import ExtractAWSData
 
+class StockScreener:
+    def __init__(self,market_cap_max=None, market_cap_min=0,dividend_min=0,
+                beta_max=None, beta_min=None,sector=None, sub_industry=None,
+                country=None, price_max=None, price_min=None,volume_max=None, volume_min=None, limit=10000):
+        
+        self.api= settings.FMP_API
+        self.market_cap_max = market_cap_max
+        self.market_cap_min = market_cap_min
+        self.volume_max = volume_max
+        self.volume_min = volume_min
+        self.dividend_min = dividend_min
+        self.beta_max = beta_max
+        self.beta_min = beta_min
+        self.sector = sector
+        self.sub_industry = sub_industry
+        self.country = country
+        self.limit = limit
+        self.price_max = price_max
+        self.price_min = price_min
 
+        self.collection = [self.market_cap_max, self.volume_max, self.volume_min,
+                           self.dividend_min, self.beta_max,self.beta_min, self.sector,self.sub_industry, 
+                           self.country, self.limit, self.price_max , self.price_min]
+
+        self.market_cap_max_url = f"&marketCapLowerThan={self.market_cap_max}"
+        # self.market_cap_min_url = f"marketCapMoreThan={self.market_cap_min}"
+
+        self.volume_max_url = f"&volumeLowerThan={self.volume_max}"
+        self.volume_min_url = f"&volumeMoreThan={self.volume_min}"
+
+        self.dividend_min_url = f"&dividendMoreThan={self.dividend_min}"
+
+        self.beta_max_url = f"&betaLowerThan={self.beta_max}"
+        self.beta_min_url = f"&betaMoreThan={self.beta_min}"
+
+        self.price_max_url = f"&priceLowerThan={self.price_max}"
+        self.price_min_url = f"p&riceMoreThan={self.price_min}"
+
+        self.sub_industry_url = f"&Industry={self.sub_industry}"
+        self.country_url = f"&Country={self.country}"
+
+        self.sector_url = f"&sector={self.sector}"
+        self.screener_url = f"https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan={str(self.market_cap_min)}&isEtf=false"
+        self.api_suffix = f"&apikey={self.api}"
+
+    def get_screen_query(self):
+        base_url = self.screener_url
+
+        if self.market_cap_max is None:
+            pass
+        else:
+            base_url += self.market_cap_max_url
+
+        if self.volume_max is None:
+            pass
+        else:
+            base_url += self.volume_max_url
+
+        if self.volume_min is None:
+            pass
+        else:
+            base_url += self.volume_min_url
+
+
+        if self.beta_max is None:
+            pass
+        else:
+            base_url += self.beta_max_url
+
+       
+        if self.beta_min is None:
+            pass
+        else:
+            base_url += self.beta_min_url
+
+
+        if self.dividend_min is None:
+            pass
+        else:
+            base_url += self.dividend_min_url
+
+        
+        if self.price_max is None:
+            pass
+        else:
+            base_url += self.price_max_url
+        
+
+        if self.price_min is None:
+            pass
+        else:
+            base_url += self.price_min_url
+        
+        if self.sub_industry is None:
+            pass
+        else:
+            base_url += self.sub_industry_url
+        
+        if self.country is None:
+            pass
+        else:
+            base_url += self.country_url
+
+        if self.sector is None:
+            pass
+        else:
+            base_url += self.sector_url
+
+
+
+        final_query_url = base_url+self.api_suffix
+        return final_query_url
+
+    
+    def get_screen_results(self):
+
+        query = self.get_screen_query()
+        data = json.loads(requests.get(query).content)
+
+        return data
+        
 
 
 class UniverseData:
@@ -55,8 +175,10 @@ class UniverseData:
             message = "All Sectors Outperformed"
         elif greater_than_zero >= 6:
             message = "General Positive Day in Markets"
-        elif greater_than_zero <= 6:
-            message = "Red Mostly Agross The Board"
+        elif greater_than_zero <= 1:
+            message = "Red Across the Board"
+        elif greater_than_zero <=6:
+            message = "Red Mostly Across The Board"
 
         return data, message
 
@@ -93,8 +215,6 @@ class UniverseData:
         
         return data
 
-
-    
 
     def get_most_gainer_loser_active(self):
 

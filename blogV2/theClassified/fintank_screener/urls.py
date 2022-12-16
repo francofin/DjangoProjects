@@ -10,8 +10,11 @@ urlpatterns = [
     path('sector-performance/', views.get_sector_performance, name='get_sector_performance'),
     path('sector-timeseries/<str:frq>/', views.get_sector_timeseries_data, name='get_sector_timeseries_data'),
     path('movers/', views.get_daily_gainer_loser_active, name='get_daily_gainer_loser_active'),
+    path('screen/', views.run_stock_screener, name='run_stock_screener'),
     path('stock-data/<str:ticker>/', views.get_stock, name='stock_data'),
+    path('stock-names/', views.get_all_stock_names_available, name='stock_names'),
     path('getgeocode/<str:address>/', views.get_company_location, name='get_company_location'),
     path('getdailydata/<str:ticker>/', views.get_daily_stock_data, name='get_daily_stock_data'),
     path('getpeerlist/<str:ticker>/<str:universe>/', views.get_stock_peer_list, name='get_stock_peer_list'),
+
 ]

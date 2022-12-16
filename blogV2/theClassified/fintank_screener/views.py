@@ -3,19 +3,33 @@ from pytz import timezone
 from requests import get
 from django.conf import settings
 from utils.StockCalculations import GetData
-from utils.UniverseCalculations import UniverseData
+from utils.UniverseCalculations import UniverseData, StockScreener
 import urllib.parse
+from rest_framework import status, mixins, generics, viewsets, parsers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from stockuploader.models import EuroStock, Stock, SP500, Nasdaq, TSX, Commoditie, ETF, ProfileStock, Crypto, Indexe
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from .serializers import EuroSerializer, SP500Serializer, StockSerializer, ETFSerializer, NasdaqSerializer, TSXSerializer, CommoditieSerializer, IndexSerializer, CryptoSerializer
+from .serializers import EuroSerializer, SP500Serializer, StockSerializer, ETFSerializer, NasdaqSerializer, TSXSerializer, CommoditieSerializer, IndexSerializer, CryptoSerializer, ScreenerSerializer
 from django.db.models import Avg, Min, Max, Count
 from .filters import SP500Filter, StockFilter, ETFFilter, NasdaqFilter, TSXFilter, CommoditiesFilter, IndexeFilter, CryptoFilter, EuroFilter
 from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 
 fmp_api_key = settings.FMP_API
+
+@api_view(['GET'])
+def get_all_stock_names_available(request):
+    # Replace with new models just for stock names, not linked to user. 
+    stocks = Stock.objects.all()
+    serializer = StockSerializer(stocks, many=True)
+
+    context = {
+        'stocks':serializer.data
+    }
+
+    return Response(context)
+
 
 @api_view(['GET'])
 def get_all_indexes(request):
@@ -36,6 +50,35 @@ def get_all_indexes(request):
         'indexes': serializer.data,
     }
     return Response(context)
+
+@api_view(['POST'])
+def run_stock_screener(request):
+    
+    market_cap_max_usr = request.data['market_cap_max'] != 'undefined' or None
+    market_cap_min_usr = request.data['market_cap_min'] != 'undefined'or 0
+    beta_max_usr = request.data['beta_max'] != 'undefined' or None
+    beta_min_usr = request.data['beta_min'] != 'undefined' or None
+    dividend_min_usr = request.data['dividend_min'] != 'undefined' or None
+    sector_usr = request.data['sector'] != 'undefined' or None
+    sub_industry_usr = request.data['sub_industry'] != 'undefined' or None
+    price_max_usr = request.data['price_max'] != 'undefined' or None
+    price_min_usr = request.data['price_min'] != 'undefined' or None
+    country_usr = request.data['country'] != 'undefined' or None
+
+
+    screener = StockScreener(market_cap_max=market_cap_max_usr, market_cap_min=market_cap_min_usr, 
+                            dividend_min=dividend_min_usr,beta_max=beta_max_usr, beta_min=beta_min_usr,sector=sector_usr, 
+                            sub_industry=sub_industry_usr,country=country_usr, price_max=price_max_usr, price_min=price_min_usr,
+                            volume_max=None, volume_min=None, limit=10000)
+
+    screen_results = screener.get_screen_results()
+
+    context = {
+        "screen_results":screen_results
+    }
+
+
+    return Response(context, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def get_stock(request, ticker):

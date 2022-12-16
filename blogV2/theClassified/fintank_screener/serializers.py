@@ -57,3 +57,21 @@ class EuroSerializer(serializers.ModelSerializer):
     class Meta:
         model=EuroStock
         fields = '__all__'
+
+
+class ScreenerSerializer(serializers.Serializer):
+    market_cap_max = serializers.IntegerField(default=None)
+    market_cap_min=serializers.IntegerField(default=0)
+    volume_max = serializers.IntegerField(default=None)
+    volume_min = serializers.IntegerField(default=None)
+    dividend_max = serializers.IntegerField(default=None)
+    dividend_min = serializers.IntegerField(default=None)
+    price_max = serializers.IntegerField(default=None)
+    price_min = serializers.IntegerField(default=None)
+    beta_max = serializers.IntegerField(default=None)
+    beta_min = serializers.IntegerField(default=None)
+    sector = serializers.IntegerField(default=None)
+    sub_industry = serializers.IntegerField(default=None)
+    is_etf = serializers.IntegerField(default=True)
+    country = serializers.IntegerField(default=None)
+    limit = serializers.IntegerField(default=None)
