@@ -1,5 +1,6 @@
 from import_export import resources
-from .models import Stock, SP500, Nasdaq, TSX, Commoditie, ETF, ProfileStock, Crypto, Indexe, EuroStock, IncomeStatement, CashFlowStatement, BalanceSheet
+from .models import Stock, SP500, Nasdaq, TSX, Commoditie, ETF, ProfileStock, Crypto, Indexe, \
+                    EuroStock, IncomeStatement, CashFlowStatement, BalanceSheet, FundamentalAttributes
 
 
 class StockResource(resources.ModelResource):
@@ -66,3 +67,8 @@ class BalanceSheetResource(resources.ModelResource):
 
     class meta:
         model = BalanceSheet
+
+class FundamentalAttributeResource(resources.ModelResource):
+
+    class meta:
+        model = FundamentalAttributes

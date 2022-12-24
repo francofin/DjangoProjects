@@ -20,15 +20,21 @@ class GetData:
         
     def get_daily_stats(self):
         daily_data = self.clean_df()
+        monthly_data = daily_data.reset_index().groupby([daily_data.index.year, daily_data.index.month], as_index=False).last().set_index('date')
         daily_data['Returns'] = daily_data.pct_change()
-        daily_data['30d_returns'] = (daily_data['close'].pct_change(30))*100
+        daily_data['1+R'] = daily_data['Returns'] +1
+        daily_data['30d_returns'] = (daily_data['1+R'].rolling(window=30).apply(np.prod, raw=True) -1)*100
         daily_data['60d_returns'] = (daily_data['close'].pct_change(60))*100
         daily_data['90d_returns'] = (daily_data['close'].pct_change(90))*100
         daily_data['120d_returns'] = (daily_data['close'].pct_change(120))*100
-        daily_data['30d_vol'] = (daily_data['Returns'].rolling(window=30).std()*np.sqrt(252))*100
-        daily_data['60d_vol'] = (daily_data['Returns'].rolling(window=60).std()*np.sqrt(252))*100
-        daily_data['120d_vol'] = (daily_data['Returns'].rolling(window=120).std()*np.sqrt(252))*100
-        return daily_data
+        monthly_data['Returns'] = monthly_data.pct_change()
+        monthly_data['1+R'] = monthly_data['Returns'] + 1
+        monthly_data['quarterly_returns'] = (monthly_data['1+R'].rolling(window=3).apply(np.prod, raw=True) -1)*100
+        monthly_data['yearly_returns'] = (monthly_data['1+R'].rolling(window=12).apply(np.prod, raw=True) -1)*100
+        # daily_data['30d_vol'] = (daily_data['Returns'].rolling(window=30).std()*np.sqrt(252))*100
+        # daily_data['60d_vol'] = (daily_data['Returns'].rolling(window=60).std()*np.sqrt(252))*100
+        # daily_data['120d_vol'] = (daily_data['Returns'].rolling(window=120).std()*np.sqrt(252))*100
+        return daily_data, monthly_data
     
     
     def get_weekly_stats(self):

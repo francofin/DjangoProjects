@@ -11,7 +11,7 @@ class StockFilter(filters.FilterSet):
 
     class Meta:
         model = Stock
-        fields = ('ticker', 'keyword', 'exchange_short', 'exchange')
+        fields = ('ticker', 'keyword', 'exchange_short', 'exchange', 'universe')
 
 class SP500Filter(filters.FilterSet):
     # gte is greater than ir equal to

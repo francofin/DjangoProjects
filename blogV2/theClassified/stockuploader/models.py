@@ -12,15 +12,20 @@ class Stock(models.Model):
     stock_type = models.CharField(max_length=300,default="", null=True)
     
     is_featured = models.BooleanField(default=True, null=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    owner_count = models.IntegerField(null=True, blank=True, default=0)
 
     def __str__(self):
         return self.symbol
 
+
 class ProfileStock(models.Model):
+    symbol = models.CharField(max_length=300, default="")
     stock = models.ForeignKey(Stock, on_delete=models.SET_NULL, null=True, default=None)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.symbol
 
 
 class Nasdaq(models.Model):
@@ -50,6 +55,7 @@ class ETF(models.Model):
     name = models.CharField(max_length=300)
     exchange = models.CharField(max_length=300, default="", null=True)
     exchange_short = models.CharField(max_length=300, default="", null=True)
+    universe = models.CharField(max_length=200, null=True, blank=True, default=None)
     def __str__(self):
         return self.symbol
 
@@ -75,7 +81,7 @@ class Indexe(models.Model):
 
 class Crypto(models.Model):
     symbol = models.CharField(max_length = 200)
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300, null=True, blank=True)
     currency = models.CharField(max_length=200, null=True)
     exchange = models.CharField(max_length=300, default="", null=True)
     def __str__(self):
@@ -96,7 +102,7 @@ class SP500(models.Model):
     sector = models.CharField(max_length=300, null=True)
     sub_sector = models.CharField(max_length=300, null=True)
     founded = models.CharField(max_length=300, null=True)
-    date_first_added=models.DateTimeField(auto_now_add=False, null=True)
+    date_first_added=models.DateTimeField(auto_now_add=False, null=True, blank=True)
     cik = models.IntegerField(max_length=400, default=None, blank=True, null=True)
     universe = models.CharField(max_length=200, null=True, blank=True, default=None)
 
@@ -237,3 +243,75 @@ class BalanceSheet(models.Model):
     def __str__(self):
         return self.symbol
 
+
+class FundamentalAttributes(models.Model):
+    symbol = models.CharField(max_length=300, null=False, blank=False)
+    revenue_per_share = models.FloatField(null=True, blank=True, default=0)
+    net_income_per_share = models.FloatField(null=True, blank=True, default=0)
+    operating_cash_flow_per_share = models.FloatField(null=True, blank=True, default=0)
+    free_cash_flow_per_share = models.FloatField(null=True, blank=True, default=0)
+    cash_per_share = models.FloatField(null=True, blank=True, default=0)
+    book_value_per_share = models.FloatField(null=True, blank=True, default=0)
+    tangible_book_value_per_share = models.FloatField(null=True, blank=True, default=0)
+    shareholders_equity_per_share = models.FloatField(null=True, blank=True, default=0)
+    interest_debt_per_share = models.FloatField(null=True, blank=True, default=0)
+    market_cap = models.FloatField(null=True, blank=True, default=0)
+    enterprise_value = models.FloatField(null=True, blank=True, default=0)
+    price_to_earnings_ratio = models.FloatField(null=True, blank=True, default=0)
+    psales_ratio = models.FloatField(null=True, blank=True, default=0)
+    price_to_operating_cashflow = models.FloatField(null=True, blank=True, default=0)
+    price_to_cashflow = models.FloatField(null=True, blank=True, default=0)
+    price_to_book_ratio = models.FloatField(null=True, blank=True, default=0)
+    # drop ptbRatio
+    enterprise_value_to_sales = models.FloatField(null=True, blank=True, default=0)
+    enterprise_value_to_ebitda = models.FloatField(null=True, blank=True, default=0)
+    ev_to_operating_cash_flow = models.FloatField(null=True, blank=True, default=0)
+    ev_to_free_cash_flow = models.FloatField(null=True, blank=True, default=0)
+    earnings_yield = models.FloatField(null=True, blank=True, default=0)
+    free_cash_flow_yield = models.FloatField(null=True, blank=True, default=0)
+    debt_to_equity = models.FloatField(null=True, blank=True, default=0)
+    debt_to_assets = models.FloatField(null=True, blank=True, default=0)
+    net_debt_to_ebitda = models.FloatField(null=True, blank=True, default=0)
+    current_ratio = models.FloatField(null=True, blank=True, default=0)
+    interest_coverage = models.FloatField(null=True, blank=True, default=0)
+    income_quality = models.FloatField(null=True, blank=True, default=0)
+    dividend_yield = models.FloatField(null=True, blank=True, default=0)
+    dividend_yield_percent = models.FloatField(null=True, blank=True, default=0)
+    payout_ratio = models.FloatField(null=True, blank=True, default=0)
+    sales_and_genral_admin_to_revenue = models.FloatField(null=True, blank=True, default=0)
+    research_and_development_to_revenue = models.FloatField(null=True, blank=True, default=0)
+    intangibles_to_total_assets = models.FloatField(null=True, blank=True, default=0)
+    capex_to_operating_cash_flow = models.FloatField(null=True, blank=True, default=0)
+    capex_to_revenue = models.FloatField(null=True, blank=True, default=0)
+    capex_to_depreciation = models.FloatField(null=True, blank=True, default=0)
+    stock_based_copensation_to_revenue = models.FloatField(null=True, blank=True, default=0)
+    graham_number = models.FloatField(null=True, blank=True, default=0)
+    return_on_invested_capital = models.FloatField(null=True, blank=True, default=0)
+    return_on_tangible_assets = models.FloatField(null=True, blank=True, default=0)
+    net_graham_number = models.FloatField(null=True, blank=True, default=0)
+    working_capital = models.FloatField(null=True, blank=True, default=0)
+    tangible_asset_value = models.FloatField(null=True, blank=True, default=0)
+    net_current_asset_value = models.FloatField(null=True, blank=True, default=0)
+    invested_capital = models.FloatField(null=True, blank=True, default=0)
+    average_recievables = models.FloatField(null=True, blank=True, default=0)
+    average_payables = models.FloatField(null=True, blank=True, default=0)
+    average_inventory = models.FloatField(null=True, blank=True, default=0)
+    days_sales_outstanding = models.FloatField(null=True, blank=True, default=0)
+    days_payables_outstanding = models.FloatField(null=True, blank=True, default=0)
+    days_inventory_on_hand = models.FloatField(null=True, blank=True, default=0)
+    recievables_turnover = models.FloatField(null=True, blank=True, default=0)
+    payables_turnover = models.FloatField(null=True, blank=True, default=0)
+    inventory_turnover = models.FloatField(null=True, blank=True, default=0)
+    return_on_equity = models.FloatField(null=True, blank=True, default=0)
+    capex_per_share = models.FloatField(null=True, blank=True, default=0)
+    dividend_per_share = models.FloatField(null=True, blank=True, default=0)
+    debt_to_market_cap = models.FloatField(null=True, blank=True, default=0)
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, null=True, default=None)
+
+
+    def __str__(self):
+        return self.symbol
+
+    
+
+# Stocks to delete TRIS-WT

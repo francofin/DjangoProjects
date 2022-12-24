@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models import Stock, SP500, Nasdaq, TSX, Commoditie, ETF, Crypto, Indexe, EuroStock, IncomeStatement, CashFlowStatement, BalanceSheet
+from .models import Stock, SP500, Nasdaq, TSX, Commoditie, ETF, Crypto, Indexe, EuroStock, IncomeStatement, CashFlowStatement, BalanceSheet, FundamentalAttributes, ProfileStock
 
 # Register your models here.
 @admin.register(Stock)
@@ -35,7 +35,7 @@ class CommoditiesAdmin(ImportExportModelAdmin):
 
 @admin.register(ETF)
 class ETFAdmin(ImportExportModelAdmin):
-    list_display = ('symbol', 'name', 'exchange', 'exchange_short')
+    list_display = ('symbol', 'name', 'exchange', 'exchange_short', 'universe')
     search_fields = ('symbol', 'name', 'exchange_short')
 
 @admin.register(Crypto)
@@ -62,3 +62,9 @@ class CFAdmin(ImportExportModelAdmin):
 class BSAdmin(ImportExportModelAdmin):
     list_display = ('symbol', 'date', 'currency', 'period')
     search_fields = ('symbol', 'date', 'currency', 'period')
+
+
+@admin.register(FundamentalAttributes)
+class FaAdmin(ImportExportModelAdmin):
+    list_display = ('symbol',)
+    search_fields = ('symbol',)
