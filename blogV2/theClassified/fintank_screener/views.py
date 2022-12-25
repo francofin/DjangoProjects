@@ -196,6 +196,19 @@ def get_company_location(request, address):
     return Response(context)
 
 @api_view(['GET'])
+def get_index_history(request, index):
+    fmp_api_key = settings.FMP_API
+    data_init = GetData(index, fmp_api_key)
+    index_data = data_init.get_daily_index_stats()
+
+    context = {
+        'index_data':index_data
+    }
+
+    return Response(context)
+
+
+@api_view(['GET'])
 def get_daily_stock_data(request, ticker):
     fmp_api_key = settings.FMP_API
 
@@ -276,8 +289,11 @@ def get_monthly_stock_data(request, ticker):
 def get_stock_peer_list(request, ticker, universe):
 
     data_init = PeerSpecificData(ticker, universe)
-    available_stocks = data_init.get_peer_chart_data()
-    return Response(available_stocks)
+    try:
+        available_stocks = data_init.get_peer_chart_data()
+        return Response(available_stocks)
+    except:
+        return Response('No Data Found for Peer Stocks Matching your Search, We continue to develop and build our resources to better serve you.')
 
 @api_view(['GET'])
 def get_sector_performance(request):

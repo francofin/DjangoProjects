@@ -15,6 +15,7 @@ urlpatterns = [
     path('stock-names/', views.get_all_stock_names_available, name='stock_names'),
     path('getgeocode/<str:address>/', views.get_company_location, name='get_company_location'),
     path('getdailydata/<str:ticker>/', views.get_daily_stock_data, name='get_daily_stock_data'),
+    path('getdailyindexdata/<str:index>/', views.get_index_history, name='get_daily_index_data'),
     path('getpeerlist/<str:ticker>/<str:universe>/', views.get_stock_peer_list, name='get_stock_peer_list'),
 
 ]

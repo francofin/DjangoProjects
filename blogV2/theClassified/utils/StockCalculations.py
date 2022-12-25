@@ -17,6 +17,9 @@ class GetData:
         clean_df = dataframe[::-1].drop('date', axis=1)
         return clean_df
         
+    def get_daily_index_stats(self):
+        daily_data = self.clean_df()
+        return daily_data
         
     def get_daily_stats(self):
         daily_data = self.clean_df()
