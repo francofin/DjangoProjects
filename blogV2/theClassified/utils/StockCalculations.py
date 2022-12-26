@@ -5,17 +5,25 @@ import pandas as pd
 
 class GetData:
     
-    def __init__(self, ticker, api):
+    def __init__(self, ticker, api, is_index= False):
         self.ticker = ticker
         self.api = api
-        self.base_url = f"https://financialmodelingprep.com/api/v3/historical-price-full/{self.ticker}?serietype=line&apikey={self.api}"
+        self.is_an_index = is_index
+        if self.is_an_index:
+            self.base_url = f"https://financialmodelingprep.com/api/v3/historical-price-full/%5E{self.ticker}?serietype=line&apikey={self.api}"
+        else:
+            self.base_url = f"https://financialmodelingprep.com/api/v3/historical-price-full/{self.ticker}?serietype=line&apikey={self.api}"
+
         self.raw_dataframe = pd.DataFrame(json.loads(requests.get(self.base_url).content)['historical'])
+        # self.raw_dataframe = json.loads(requests.get(self.base_url).content)['historical']
         
+
     def clean_df(self):
         dataframe = self.raw_dataframe
         dataframe.set_index(pd.to_datetime(dataframe['date'], infer_datetime_format=True), inplace=True)
         clean_df = dataframe[::-1].drop('date', axis=1)
         return clean_df
+        
         
     def get_daily_index_stats(self):
         daily_data = self.clean_df()

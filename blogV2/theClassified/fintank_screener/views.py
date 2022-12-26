@@ -196,13 +196,17 @@ def get_company_location(request, address):
     return Response(context)
 
 @api_view(['GET'])
-def get_index_history(request, index):
+def get_index_history(request, ticker):
     fmp_api_key = settings.FMP_API
-    data_init = GetData(index, fmp_api_key)
+    data_init = GetData(ticker, fmp_api_key, is_index=True)
     index_data = data_init.get_daily_index_stats()
+    print(index_data.head())
+    index_dates = [str(x)[0:10] for x in list(index_data.index)]
+    index_prices = [x for x in list(index_data['close'])]
 
     context = {
-        'index_data':index_data
+        'index_dates':index_dates,
+        'index_prices':index_prices
     }
 
     return Response(context)
