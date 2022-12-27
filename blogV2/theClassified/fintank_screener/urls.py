@@ -17,5 +17,6 @@ urlpatterns = [
     path('getdailydata/<str:ticker>/', views.get_daily_stock_data, name='get_daily_stock_data'),
     path('getdailyindexdata/<str:ticker>/', views.get_index_history, name='get_daily_index_data'),
     path('getpeerlist/<str:ticker>/<str:universe>/', views.get_stock_peer_list, name='get_stock_peer_list'),
+    path('getmarketupgradesdowngrades/', views.get_stock_upgrades_downgrades, name='upgrades_downgrades'),
 
 ]

@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, re
 from pytz import timezone
 from requests import get
 from django.conf import settings
-from utils.StockCalculations import GetData
+from utils.StockCalculations import GetData, StockSentiment
 from utils.UniverseCalculations import UniverseData, StockScreener
 from utils.PeerCalculations import PeerSpecificData
 import urllib.parse
@@ -202,13 +202,23 @@ def get_index_history(request, ticker):
     index_data = data_init.get_daily_index_stats()
     print(index_data.head())
     index_dates = [str(x)[0:10] for x in list(index_data.index)]
-    index_prices = [x for x in list(index_data['close'])]
+    index_prices = [x for x in list(index_data['adjClose'])]
 
     context = {
         'index_dates':index_dates,
         'index_prices':index_prices
     }
 
+    return Response(context)
+
+@api_view(['GET'])
+def get_stock_upgrades_downgrades(request):
+    fmp_api_key = settings.FMP_API
+    data = StockSentiment(fmp_api_key)
+    sentiments = data.get_stock_upgrades_downgrades()
+    context = {
+        'sentiment':sentiments
+    }
     return Response(context)
 
 

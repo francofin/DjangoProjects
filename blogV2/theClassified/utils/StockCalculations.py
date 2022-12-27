@@ -10,7 +10,7 @@ class GetData:
         self.api = api
         self.is_an_index = is_index
         if self.is_an_index:
-            self.base_url = f"https://financialmodelingprep.com/api/v3/historical-price-full/%5E{self.ticker}?serietype=line&apikey={self.api}"
+            self.base_url = f"https://financialmodelingprep.com/api/v3/historical-price-full/%5E{self.ticker}?apikey={self.api}"
         else:
             self.base_url = f"https://financialmodelingprep.com/api/v3/historical-price-full/{self.ticker}?serietype=line&apikey={self.api}"
 
@@ -27,7 +27,8 @@ class GetData:
         
     def get_daily_index_stats(self):
         daily_data = self.clean_df()
-        return daily_data
+        clean_data = daily_data[['adjClose']]
+        return clean_data
         
     def get_daily_stats(self):
         daily_data = self.clean_df()
@@ -78,3 +79,12 @@ class GetData:
         
         return monthly_data
 
+
+class StockSentiment:
+    def __init__ (self, api):
+        self.api = api
+        self.upgrade_downgrade_url = f"https://financialmodelingprep.com/api/v4/upgrades-downgrades-rss-feed?page=0&apikey={self.api}"
+
+    def get_stock_upgrades_downgrades(self):
+        data = json.loads(requests.get(self.upgrade_downgrade_url).content)
+        return data
