@@ -5,12 +5,15 @@ import pandas as pd
 
 class GetData:
     
-    def __init__(self, ticker, api, is_index= False):
+    def __init__(self, ticker, api, is_index= False, is_commodity=False):
         self.ticker = ticker
         self.api = api
         self.is_an_index = is_index
+        self.is_a_commodity= is_commodity
         if self.is_an_index:
             self.base_url = f"https://financialmodelingprep.com/api/v3/historical-price-full/%5E{self.ticker}?apikey={self.api}"
+        elif self.is_a_commodity:
+            self.base_url = f"https://financialmodelingprep.com/api/v3/historical-price-full/{self.ticker}?apikey={self.api}"
         else:
             self.base_url = f"https://financialmodelingprep.com/api/v3/historical-price-full/{self.ticker}?serietype=line&apikey={self.api}"
 
@@ -29,6 +32,25 @@ class GetData:
         daily_data = self.clean_df()
         clean_data = daily_data[['adjClose']]
         return clean_data
+
+    def get_daily_commod_stats(self):
+        daily_data = self.clean_df()
+        clean_data = daily_data[['adjClose']]
+        clean_df_copy = clean_data.copy()
+        monthly_data = clean_data.reset_index().groupby([clean_data.index.year, clean_data.index.month], as_index=False).last().set_index('date')
+        clean_df_copy['Returns'] = clean_df_copy.pct_change()
+        clean_df_copy['1+R'] = clean_df_copy['Returns'] +1
+        clean_df_copy['30d_returns'] = (clean_df_copy['1+R'].rolling(window=30).apply(np.prod, raw=True) -1)*100
+        clean_df_copy['60d_returns'] = (clean_df_copy['adjClose'].pct_change(60))*100
+        clean_df_copy['90d_returns'] = (clean_df_copy['adjClose'].pct_change(90))*100
+        clean_df_copy['120d_returns'] = (clean_df_copy['adjClose'].pct_change(120))*100
+        monthly_data['Returns'] = monthly_data.pct_change()
+        monthly_data['1+R'] = monthly_data['Returns'] + 1
+        monthly_data['quarterly_returns'] = (monthly_data['1+R'].rolling(window=3).apply(np.prod, raw=True) -1)*100
+        monthly_data['yearly_returns'] = (monthly_data['1+R'].rolling(window=12).apply(np.prod, raw=True) -1)*100
+        return clean_df_copy, monthly_data
+
+    
         
     def get_daily_stats(self):
         daily_data = self.clean_df()

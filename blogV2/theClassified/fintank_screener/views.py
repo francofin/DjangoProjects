@@ -95,6 +95,30 @@ def get_stock(request, ticker):
     return Response(context)
 
 @api_view(['GET'])
+def get_commodity(request, ticker):
+    filterSet = Commoditie.objects.filter(symbol =ticker)
+
+
+    serializer = CommoditieSerializer(filterSet, many=True)
+
+    context = {
+        'stock': serializer.data,
+    }
+    return Response(context)
+
+@api_view(['GET'])
+def get_crypto(request, ticker):
+    filterSet = Crypto.objects.filter(symbol =ticker)
+
+
+    serializer = CryptoSerializer(filterSet, many=True)
+
+    context = {
+        'stock': serializer.data,
+    }
+    return Response(context)
+
+@api_view(['GET'])
 def get_homepage_indexes(request):
     filterSet = Indexe.objects.filter(is_for_homepage=True).order_by('id')
 
@@ -200,7 +224,6 @@ def get_index_history(request, ticker):
     fmp_api_key = settings.FMP_API
     data_init = GetData(ticker, fmp_api_key, is_index=True)
     index_data = data_init.get_daily_index_stats()
-    print(index_data.head())
     index_dates = [str(x)[0:10] for x in list(index_data.index)]
     index_prices = [x for x in list(index_data['adjClose'])]
 
@@ -278,7 +301,61 @@ def get_daily_stock_data(request, ticker):
 
     return Response(context)
 
+@api_view(['GET'])
+def get_daily_commod_data(request, ticker):
+    fmp_api_key = settings.FMP_API
 
+    data_init = GetData(ticker, fmp_api_key, is_index=False, is_commodity=True)
+    data = data_init.get_daily_commod_stats()
+    daily_data = data[0]
+    monthly_data = data[1]
+    daily_dates = [str(x)[0:10] for x in list(daily_data.index)]
+    daily_prices = [x for x in list(daily_data['adjClose'])]
+
+    day_30_returns = daily_data['30d_returns'].dropna()
+    day_60_returns = daily_data['60d_returns'].dropna()
+    day_90_returns = daily_data['90d_returns'].dropna()
+    day_120_returns = daily_data['120d_returns'].dropna()
+    year_1_returns = monthly_data['yearly_returns'].dropna()
+    quarter_returns = monthly_data['quarterly_returns'].dropna()
+
+    day_30_date_list = [str(x)[0:10] for x in list(day_30_returns.index)]
+    day_30_return_list = [str(x)[0:10] for x in list(day_30_returns)]
+
+    day_60_date_list = [str(x)[0:10] for x in list(day_60_returns.index)]
+    day_60_return_list = [str(x)[0:10] for x in list(day_60_returns)]
+
+    day_90_date_list = [str(x)[0:10] for x in list(day_90_returns.index)]
+    day_90_return_list = [str(x)[0:10] for x in list(day_90_returns)]
+
+    day_120_date_list = [str(x)[0:10] for x in list(day_120_returns.index)]
+    day_120_return_list = [str(x)[0:10] for x in list(day_120_returns)]
+
+    year_1_date_list = [str(x)[0:10] for x in list(year_1_returns.index)]
+    year_1_return_list = [str(x)[0:10] for x in list(year_1_returns)]
+
+    quarter_date_list = [str(x)[0:10] for x in list(quarter_returns.index)]
+    quarter_return_list = [str(x)[0:10] for x in list(quarter_returns)]
+
+
+    context = {
+        'dates':daily_dates,
+        'prices':daily_prices,
+        'day_30_date_list':day_30_date_list,
+        'day_30_return_list':day_30_return_list,
+        'day_60_date_list':day_60_date_list,
+        'day_60_return_list':day_60_return_list,
+        'day_90_date_list':day_90_date_list,
+        'day_90_return_list':day_90_return_list,
+        'day_120_date_list':day_120_date_list,
+        'day_120_return_list':day_120_return_list,
+        'year_1_date_list':year_1_date_list,
+        'year_1_return_list':year_1_return_list,
+        'quarter_date_list':quarter_date_list,
+        'quarter_return_list':quarter_return_list,
+    }
+
+    return Response(context)
 
 @api_view(['GET'])
 def get_weekly_stock_data(request, ticker):
