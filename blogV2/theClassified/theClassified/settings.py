@@ -249,8 +249,8 @@ GEOS_LIBRARY_PATH = os.getenv("MY_ENV_LOC")+ '/Lib/site-packages/osgeo/geos_c.dl
 GDAL_LIBRARY_PATH = os.getenv("MY_ENV_LOC") + '/Lib/site-packages/osgeo/gdal304.dll'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'theClassified/static'),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'theClassified/static'),
+# ]
 
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'

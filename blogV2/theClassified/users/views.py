@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import CustomUser, UserProfile
 from .serializers import UserSerializer, UserProfileSerializer, SignUpSerializer
 from django.http import JsonResponse
@@ -14,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from jobs.validators import validate_image, validate_file_extension
 from utils.uploadImages import ImageUploader
-from stockuploader.models import ProfileStock
+from stockuploader.models import ProfileStock, Stock
 from fintank_screener.serializers import ProfileSerializer
 # Create your views here.
 
@@ -63,6 +63,45 @@ def get_user_portfolio(request):
     serializer = ProfileSerializer(portfolio_stocks, many=True)
 
     return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_stock_to_watchlist(request, ticker):
+    user = request.user
+    symbol = ticker
+    stock = get_object_or_404(Stock, symbol=ticker)
+
+    
+    already_on_watchlist = stock.profilestock_set.filter(user=user).exists()
+    if already_on_watchlist:
+        return Response({
+            'error':"You Have Already Added This Stock To Your WatchList"
+        }, status = status.HTTP_400_BAD_REQUEST)
+
+    portfolio_stock = ProfileStock.objects.create(
+        symbol=symbol,
+        user=user,
+        stock = stock
+    )
+
+    serializer = ProfileSerializer(portfolio_stock)
+
+    context = {
+        'added':True,
+        'stock':portfolio_stock.id
+    }
+
+    return Response(context, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def is_on_watch_list(request, ticker):
+    user = request.user
+    stock = get_object_or_404(Stock, symbol=ticker)
+
+    applied = stock.profilestock_set.filter(user=user).exists()
+
+    return Response(applied)
 
 @api_view(['PUT', 'POST'])
 @permission_classes([IsAuthenticated])

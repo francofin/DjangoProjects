@@ -32,4 +32,4 @@ class UserSerializer(serializers.ModelSerializer):
     profile_picture_cs = serializers.CharField(max_length=600)
     class Meta:
         model = CustomUser
-        fields = ('id', 'first_name', 'last_name', 'email', 'username', 'role', 'user_security_identifier', 'password', 'profile_picture', 'profile_picture_cs')
+        fields = ('id', 'first_name', 'last_name', 'email', 'username', 'role','created_at', 'user_security_identifier', 'password', 'profile_picture', 'profile_picture_cs')
