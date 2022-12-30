@@ -6,6 +6,7 @@ from cloudinary.models import CloudinaryField
 from django.conf import settings
 from django.dispatch import receiver
 from store.models import Store
+from stockuploader.models import ProfileStock
 # Create your models here.
 
 
@@ -15,6 +16,7 @@ class UserRoles(models.TextChoices):
      ADMIN = 'Admin'
      EMPLOYEE = 'Employee'
      CLIENT='Client'
+     INVESTOR ='Investor'
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='userprofile', on_delete=models.CASCADE)

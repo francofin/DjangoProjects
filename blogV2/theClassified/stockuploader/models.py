@@ -19,9 +19,10 @@ class Stock(models.Model):
 
 
 class ProfileStock(models.Model):
+    name = models.CharField(max_length=300, null=False)
     symbol = models.CharField(max_length=300, default="")
     stock = models.ForeignKey(Stock, on_delete=models.SET_NULL, null=True, default=None)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='portfolio')
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

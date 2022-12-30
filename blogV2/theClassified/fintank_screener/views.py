@@ -119,6 +119,19 @@ def get_crypto(request, ticker):
     return Response(context)
 
 @api_view(['GET'])
+def get_etf(request, ticker):
+    filterSet = ETF.objects.filter(symbol =ticker)
+
+
+    serializer = ETFSerializer(filterSet, many=True)
+
+    context = {
+        'stock': serializer.data,
+    }
+    return Response(context)
+
+
+@api_view(['GET'])
 def get_homepage_indexes(request):
     filterSet = Indexe.objects.filter(is_for_homepage=True).order_by('id')
 

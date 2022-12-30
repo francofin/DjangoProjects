@@ -14,6 +14,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from jobs.validators import validate_image, validate_file_extension
 from utils.uploadImages import ImageUploader
+from stockuploader.models import ProfileStock
+from fintank_screener.serializers import ProfileSerializer
 # Create your views here.
 
 
@@ -52,6 +54,15 @@ def get_current_user_profile(request):
     print(user_profile) 
 
     return Response(user_profile.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_portfolio(request):
+    args = {'user':request.user.id}
+    portfolio_stocks = ProfileStock.objects.filter(**args)
+    serializer = ProfileSerializer(portfolio_stocks, many=True)
+
+    return Response(serializer.data)
 
 @api_view(['PUT', 'POST'])
 @permission_classes([IsAuthenticated])

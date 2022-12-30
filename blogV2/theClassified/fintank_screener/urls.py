@@ -14,6 +14,7 @@ urlpatterns = [
     path('stock-data/<str:ticker>/', views.get_stock, name='stock_data'),
     path('commod-data/<str:ticker>/', views.get_commodity, name='commod_data'),
     path('crypto-data/<str:ticker>/', views.get_crypto, name='crypto_data'),
+    path('etf-data/<str:ticker>/', views.get_etf, name='etf_data'),
     path('stock-names/', views.get_all_stock_names_available, name='stock_names'),
     path('getgeocode/<str:address>/', views.get_company_location, name='get_company_location'),
     path('getdailydata/<str:ticker>/', views.get_daily_stock_data, name='get_daily_stock_data'),

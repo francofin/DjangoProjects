@@ -58,6 +58,12 @@ class EuroSerializer(serializers.ModelSerializer):
         model=EuroStock
         fields = '__all__'
 
+class ProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=ProfileStock
+        fields = '__all__'
+
 
 class ScreenerSerializer(serializers.Serializer):
     market_cap_max = serializers.IntegerField(default=None)
